@@ -20,12 +20,12 @@ class AuthenticationController extends Controller
                  */
                 $user = Auth::user();
                 $token = $user->createToken('api-token')->accessToken;
-                return response(['message' => 'success', 'token' => $token, 'user' => $user,]);
+                return $this->respondSuccess(['token' => $token, 'user' => $user], 'Login successful');
             }
+            return $this->respondUnAuthorized('invalid email or password');
         } catch (\Exception $exception) {
-            return response(['messgae' => $exception->getMessage()], 400);
+            $this->respondInternalError($exception->getMessage());
         }
-        return response(['message' => 'invalid username or password'], 401);
     }
 
 
@@ -54,9 +54,7 @@ class AuthenticationController extends Controller
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
+        return $this->respondSuccess([], 'successfully logged out');
     }
 
     /**
