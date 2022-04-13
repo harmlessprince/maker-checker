@@ -19,7 +19,7 @@ class AuthenticationController extends Controller
                  * @var User $user
                  */
                 $user = Auth::user();
-                $token = $user->createToken('api-token')->accessToken;
+                $token = $user->createToken('api-token')->plainTextToken;
                 return $this->respondSuccess(['token' => $token, 'user' => $user], 'Login successful');
             }
             return $this->respondUnAuthorized('invalid email or password');
