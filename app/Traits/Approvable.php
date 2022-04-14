@@ -106,14 +106,4 @@ trait Approvable
         $after = $changed;
         return compact('before', 'after');
     }
-
-    /**
-     * check whether user is can approve a request
-     *
-     * @return bool
-     */
-    public static function canApproveRequest(): bool
-    {
-        return false;
-    }
 }

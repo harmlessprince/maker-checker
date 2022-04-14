@@ -1,64 +1,95 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Patricia (Glover) Maker-Checker Task
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Introduction
 
-## About Laravel
+A maker-checker system revolves around the idea that for any change to be made to user
+information by an administrator, it must be approved by a fellow administrator in order to take
+effect; and if the request is declined, the change isn’t persisted.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Table of Contents
+1. <a href="#how-it-works">How it works</a>
+2. <a href="#technology-stack">Technology Stack</a>
+3. <a href="#application-features">Application Features</a>
+4. <a href="#api-endpoints">API Endpoints</a>
+5. <a href="#setup">Setup</a>
+6. <a href="#author">Author</a>
+7. <a href="#license">License</a>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+## Technology Stack
+  - [PHP](https://www.php.net)
+  - [Laravel](https://laravel.com)
+  - [MySQL](https://www.mysql.com)
+  ### Testing tools
+  - [PHPUnit](https://phpunit.de) 
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Application Features
+* A user can login into the system by providing a valid email and password.
+* An authenticated user can logout of the system.
+* An authenticated admin can register new user into the system by providing first name, last name, email, role and password of user.
+* An authenticated admin can see all pending requests submitted by other admins in the system.
+* The system prevents duplication of pending request that is already in the system.
+* An authenticated and an authorized admin can approve pending requests submitted by other admins in the system
+* An authenticated and an authorized admin can decline pending requests submitted by other admins in the system
+* Email is sent to admins in the system except the creator of the request.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## API Endpoints
+Method | Route | Description
+--- | --- | ---
+`POST` | `/api/auth/login` | login to the system by providing email and password
+`POST` | `/api/auth/logout` | logout of the system
+`POST` | `/api/users` | Submit request to create a user
+`GET` | `/api/users/:id` | Fetch a single user
+`PATCH` | `/api/users/:id` | Submit request to update a user
+`DELETE` | `/api/users/:id` | Submit request to delete a user
+`GET` | `/api/request/pending` | Fetch all pending requests in the system
+`GET` | `/api/requests/pending/:id` | Fetch a single pending request
+`PATCH` | `/api/requests/approve/:id` | Approve a pending request
+`PATCH` | `/api/requests/decline/:id` | Decline a pending request
 
-## Laravel Sponsors
+## Setup
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+  #### Dependencies
+  - [Docker](https://docs.docker.com/desktop/mac/install/)
+ 
+  #### Getting Started
+  - Install and setup docker
+  - Open terminal and run the following commands
+    ```
+    $ git clone https://github.com/harmlessprince/maker-checker.git
+    $ cd maker-checker
+    $ docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v $(pwd):/var/www/html \
+        -w /var/www/html \
+        laravelsail/php74-composer:latest \
+        composer install --ignore-platform-reqs
+    $ cp .env.example .env
+    $ ./vendor/bin/sail up -d
+    $ ./vendor/bin/sail artisan key:generate
+    ```
+  #### Run Migration
+    $ vendor/bin/sail bash
+    $ php artisan storage:link
+    $ php artisan migrate --seed
+    $ exit
+  #### Install Javascript Dependencies
+    $ vendor/bin/sail npm install
+    $ vendor/bin/sail npm run dev
+  - Visit http://localhost:81/ on your browser
+  #### Stop Application
+    $ ./vendor/bin/sail down -v
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+  ### Testing
+  ```
+  $ ./vendor/bin/sail test
+  ```
+  If correctly setup, all tests should pass
+  
+## Author
+ Name: Adewuyi Taofeeq
 
 ## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+ISC

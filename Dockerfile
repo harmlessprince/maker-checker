@@ -1,4 +1,4 @@
-FROM php:8.0.3-fpm-buster
+FROM php:7.4-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -32,3 +32,7 @@ RUN mkdir -p /home/$user/.composer && \
 WORKDIR /var/www
 
 USER $user
+
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]
