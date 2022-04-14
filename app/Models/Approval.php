@@ -24,13 +24,16 @@ class Approval extends Model
         return $this->morphTo();
     }
 
+    public  function createdBy (){
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
     public function scopePendingRequests(Builder $builder){
        return $builder
            ->where('is_approved', false)
            ->where('status', ApprovalStatus::PENDING)
            ->where('created_by', '<>', auth('sanctum')->id());
     }
-
 
     public function decline(){
         $this->status = ApprovalStatus::DECLINED;

@@ -4,9 +4,11 @@ namespace App\Traits;
 
 use App\Enums\ApprovalStatus;
 use App\Enums\Operations;
+use App\Events\ApprovalSubmittedEvent;
 use App\Exceptions\ApprovalExistsException;
 use App\Models\Approval;
 use App\Observers\ApprovableObserver;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +52,9 @@ trait Approvable
 
         $check = $this->approvalExists($generatedData);
         if (!$check) {
-            Approval::create($generatedData);
+//           $approval = Approval::create($generatedData);
+           $approval = Approval::first();
+           ApprovalSubmittedEvent::dispatch($approval);
         } else {
             throw new ApprovalExistsException('An admin already submitted the request');
         }

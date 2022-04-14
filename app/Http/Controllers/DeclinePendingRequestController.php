@@ -15,6 +15,7 @@ class DeclinePendingRequestController extends Controller
     {
         $this->authorize('update', $approval);
         $approval->decline();
+        $approval->delete();
         return $this->respondSuccess([], Messages::REQ_DECLINED);
     }
 

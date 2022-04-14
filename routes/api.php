@@ -35,6 +35,7 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::name('requests.')->prefix('requests')->group(function () {
         Route::get('pending', [PendingRequestController::class, 'index'])->name('index');
+        Route::get('pending/{approval}', [PendingRequestController::class, 'show'])->name('show');
         Route::patch('approve/{approval}', ApprovePendingRequestController::class)->name('approve');
         Route::patch('decline/{approval}', DeclinePendingRequestController::class)->name('decline');
     });
