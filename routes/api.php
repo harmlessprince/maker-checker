@@ -39,5 +39,5 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('approve/{approval}', ApprovePendingRequestController::class)->name('approve');
         Route::patch('decline/{approval}', DeclinePendingRequestController::class)->name('decline');
     });
-    Route::apiResource('users', UserController::class);
+    Route::apiResource('users', UserController::class)->except('index');
 });

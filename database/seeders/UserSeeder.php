@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
 
 class UserSeeder extends Seeder
 {
@@ -42,16 +43,18 @@ class UserSeeder extends Seeder
                 'email' => 'willsmith@gmail.com',
                 'role' => UserRoles::USER,
                 'email_verified_at' => now(),
-                'password' =>Hash::make('password'),
+                'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
             ]
         ];
         foreach ($users as $user) {
-            if($user['role'] != UserRoles::USER){
+            if ($user['role'] != UserRoles::USER) {
                 $newUser = new User($user);
                 $newUser->saveQuietly();
-            }else{
-                User::create($user);
+            } else {
+                if (!App::isProduction()) {
+                    User::create($user);
+                }
             }
         }
     }

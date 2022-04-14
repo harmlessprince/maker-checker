@@ -52,8 +52,7 @@ trait Approvable
 
         $check = $this->approvalExists($generatedData);
         if (!$check) {
-//           $approval = Approval::create($generatedData);
-           $approval = Approval::first();
+           $approval = Approval::create($generatedData);
            ApprovalSubmittedEvent::dispatch($approval);
         } else {
             throw new ApprovalExistsException('An admin already submitted the request');

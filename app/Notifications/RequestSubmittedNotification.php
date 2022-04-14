@@ -45,7 +45,7 @@ class RequestSubmittedNotification extends Notification
     {
         return (new MailMessage)
             ->greeting('Hi, ' . $notifiable->first_name . ' ' . $notifiable->last_name)
-            ->line('This is to notify you that an approval request has been submitted')
+            ->line('This is to notify you that a request has been submitted')
             ->line('Request type: ' . $this->approval->operation)
             ->line('Submitted by: ' . $this->approval->createdBy->first_name . ' ' . $this->approval->createdBy->last_name)
             ->line('Submitted: ' . $this->approval->created_at->diffForHumans())

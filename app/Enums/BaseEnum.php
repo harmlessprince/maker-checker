@@ -6,7 +6,7 @@ use ReflectionClass;
 
 abstract class BaseEnum
 {
-    public static function getConstants()
+    public static function getConstants(): array
     {
         $reflectionClass = new ReflectionClass(static::class);
         return $reflectionClass->getConstants();
