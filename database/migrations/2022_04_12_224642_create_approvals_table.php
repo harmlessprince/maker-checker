@@ -16,16 +16,18 @@ class CreateApprovalsTable extends Migration
     {
         Schema::create('approvals', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->unsigned();
+            $table->integer('created_by')->unsigned();
             $table->integer('approvable_id')->unsigned()->nullable();
             $table->string('approvable_type');
             $table->string('operation');
-            $table->text('values');
-            $table->text('changes')->nullable();
+            $table->text('before')->nullable();
+            $table->text('after')->nullable();
             $table->boolean('is_approved')->default(0);
             $table->string('status')->default(ApprovalStatus::PENDING);
-            $table->foreignId('approved_by')->constrained('users', 'id');
-            $table->timestamp('approved_date')->nullable();
+            $table->foreignId('approved_by')->nullable()->constrained('users', 'id');
+            $table->timestamp('approved_at')->nullable();
+            $table->foreignId('declined_by')->nullable()->constrained('users', 'id');
+            $table->timestamp('declined_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

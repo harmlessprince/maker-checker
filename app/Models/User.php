@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use App\Enums\UserRoles;
+use App\Traits\Approvable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    use Approvable;
 
-    
 
     /**
      * The attributes that are mass assignable.
@@ -46,11 +50,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
     /**
-     * Get all of the post's comments.
+     * Get all the user's approvals.
      */
-    public function approvals()
+    public function approvals(): MorphMany
     {
         return $this->morphMany(Approval::class, 'approvable');
     }
+
+//    public function setPasswordAttribute($value)
+//    {
+//        if (Hash::needsRehash($value)) {
+//            $this->attributes['password'] = Hash::make($value);
+//        }else{
+//            $this->attributes['password'] = $value;
+//        }
+//
+//    }
 }

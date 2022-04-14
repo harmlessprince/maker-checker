@@ -2,9 +2,9 @@
 
 namespace App\Enums;
 
-class ApprovalStatus
+class ApprovalStatus extends BaseEnum
 {
     const PENDING = 'pending';
     const APPROVED = 'approved';
-    const REJECTED = 'rejected';
+    const DECLINED = 'declined';
 }

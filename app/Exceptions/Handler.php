@@ -66,7 +66,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e): Response
     {
-
         if ($e instanceof AuthenticationException) {
             return $this->apiResponse(
                 [
@@ -116,12 +115,15 @@ class Handler extends ExceptionHandler
             );
         }
         if ($e instanceof QueryException) {
+            $message = 'There was Issue with the Query';
+            if ($e->getCode() == 23000){
+                $message = 'Duplicate entry found';
+            }
             return $this->apiResponse(
                 [
                     'success' => false,
-                    'message' => 'There was Issue with the Query',
+                    'message' => $message,
                     'exception' => $e
-
                 ],
                 500
             );
@@ -157,7 +159,6 @@ class Handler extends ExceptionHandler
                 500
             );
         }
-
 
         return parent::render($request, $e);
     }

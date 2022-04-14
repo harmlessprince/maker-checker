@@ -2,9 +2,8 @@
 
 namespace App\Enums;
 
-class UserRoles
+class UserRoles extends BaseEnum
 {
-    const SUPER_ADMIN = 'Super Admin';
-    const ADMIN = 'Admin';
-    const ADMINISTRATOR ='Administrator';
+    const ADMIN = 'admin';
+    const USER ='user';
 }

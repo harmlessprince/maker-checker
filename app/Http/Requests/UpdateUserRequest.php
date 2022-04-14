@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\UserRoles;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,9 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'first_name' => ['sometimes', 'string', 'min:2', 'max:255'],
+            'last_name' => ['sometimes', 'string', 'min:2', 'max:255'],
+            'email' => ['sometimes', 'email', Rule::unique('email')->ignore($this->id)],
         ];
     }
 }

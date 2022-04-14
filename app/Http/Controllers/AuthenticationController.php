@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Messages;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,32 +21,13 @@ class AuthenticationController extends Controller
                  */
                 $user = Auth::user();
                 $token = $user->createToken('api-token')->plainTextToken;
-                return $this->respondSuccess(['token' => $token, 'user' => $user], 'Login successful');
+                return $this->respondSuccess(['token' => $token, 'user' => $user], Messages::LOGIN_SUCCESS);
             }
-            return $this->respondUnAuthorized('invalid email or password');
+            return $this->respondUnAuthorized(Messages::FAILED_LOGIN);
         } catch (\Exception $exception) {
-            $this->respondInternalError($exception->getMessage());
+            return $this->respondInternalError($exception->getMessage());
         }
     }
-
-
-    public function register(RegisterRequest $request)
-    {
-        try {
-            $user = User::create([
-                'first_name' => $request->input('first_name'),
-                'last_name' => $request->input('last_name'),
-                'email' => $request->input('email'),
-                'password' => Hash::make($request->input('password')),
-            ]);
-            $user->sendEmailVerificationNotification();
-
-            return response(['message' => 'success', 'user' => $user], 200);
-        } catch (\Exception $exception) {
-            return response(['message' => $exception->getMessage()], 400);
-        }
-    }
-
 
     /**
      * THis logs the user out of the application
@@ -53,8 +35,8 @@ class AuthenticationController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
-        return $this->respondSuccess([], 'successfully logged out');
+        $request->user()->token()->delete();
+        return $this->respondSuccess([], Messages::LOGOUT_SUCCESS);
     }
 
     /**
