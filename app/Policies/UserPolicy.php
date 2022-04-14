@@ -2,9 +2,11 @@
 
 namespace App\Policies;
 
+use App\Enums\Messages;
 use App\Enums\UserRoles;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
@@ -18,7 +20,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        return  $user->role == UserRoles::ADMIN;
+        return  $user->role == UserRoles::ADMIN  ? Response::allow() : Response::deny(Messages::ADMIN_ACCESS_REQUIRED);
     }
 
     /**
@@ -30,7 +32,7 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        return  $user->role == UserRoles::ADMIN || $model->id == $user->id;
+        return  $user->role == UserRoles::ADMIN || $model->id == $user->id  ? Response::allow() : Response::deny(Messages::DENY_MESSAGE);
     }
 
     /**
@@ -41,7 +43,7 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return  $user->role == UserRoles::ADMIN;
+        return  $user->role == UserRoles::ADMIN  ? Response::allow() : Response::deny(Messages::ADMIN_ACCESS_REQUIRED);
     }
 
     /**
@@ -53,7 +55,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        return  $user->role == UserRoles::ADMIN || $user->id == $model->id;
+        return  $user->role == UserRoles::ADMIN || $user->id == $model->id  ? Response::allow() : Response::deny(Messages::DENY_MESSAGE);
     }
 
     /**
@@ -65,7 +67,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        return  $user->role == UserRoles::ADMIN || $user->id == $model->id;
+        return  $user->role == UserRoles::ADMIN || $user->id == $model->id  ? Response::allow() : Response::deny(Messages::DENY_MESSAGE);
     }
 
 

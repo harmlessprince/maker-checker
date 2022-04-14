@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Enums\ApprovalStatus;
+use App\Enums\Messages;
 use App\Enums\UserRoles;
 use App\Models\Approval;
 use App\Models\User;
@@ -20,7 +22,7 @@ class ApprovalPolicy
      */
     public function viewAny(User $user)
     {
-        return  $user->role == UserRoles::ADMIN;
+        return  $user->role == UserRoles::ADMIN  ? Response::allow() : Response::deny(Messages::ADMIN_ACCESS_REQUIRED);
     }
 
     /**
@@ -32,7 +34,7 @@ class ApprovalPolicy
      */
     public function view(User $user, Approval $approval)
     {
-        return  $user->role == UserRoles::ADMIN;
+        return  $user->role == UserRoles::ADMIN  ? Response::allow() : Response::deny(Messages::ADMIN_ACCESS_REQUIRED);
     }
 
     /**
@@ -43,7 +45,7 @@ class ApprovalPolicy
      */
     public function create(User $user)
     {
-      return  $user->role == UserRoles::ADMIN;
+      return  $user->role == UserRoles::ADMIN ? Response::allow() : Response::deny(Messages::ADMIN_ACCESS_REQUIRED);
     }
 
     /**
@@ -55,8 +57,14 @@ class ApprovalPolicy
      */
     public function update(User $user, Approval $approval)
     {
-        return  $user->role == UserRoles::ADMIN && $user->id != $approval->created_by  ? Response::allow()
-            : Response::deny('Only administrators that didn\'t initiate approval are allowed perform approval');
+        if ($approval->status != ApprovalStatus::PENDING){
+            $status = $approval->status;
+            return Response::deny("You are not allowed to approve a request that has been {$status}");
+        }
+        if ($user->role == UserRoles::ADMIN && $user->id != $approval->created_by){
+            return Response::deny('Only administrators that didn\'t initiate approval are allowed perform approval');
+        }
+        return  true;
     }
 
     /**
@@ -68,30 +76,6 @@ class ApprovalPolicy
      */
     public function delete(User $user, Approval $approval)
     {
-        return  $user->role == UserRoles::ADMIN && $user->id != $approval->created_by;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Approval  $approval
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function restore(User $user, Approval $approval)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Approval  $approval
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function forceDelete(User $user, Approval $approval)
-    {
-        //
+        return  $user->role == UserRoles::ADMIN && $user->id != $approval->created_by ? Response::allow() :  Response::deny(Messages::DENY_MESSAGE);
     }
 }
