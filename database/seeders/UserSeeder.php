@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class UserSeeder extends Seeder
 {
@@ -47,12 +48,14 @@ class UserSeeder extends Seeder
                 'remember_token' => Str::random(10),
             ]
         ];
+      
         foreach ($users as $user) {
             if ($user['role'] != UserRoles::USER) {
                 $newUser = new User($user);
                 $newUser->saveQuietly();
             } else {
                 if (!App::isProduction()) {
+                    Auth::loginUsingId(1);
                     User::create($user);
                 }
             }

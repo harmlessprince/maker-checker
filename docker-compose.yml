@@ -25,7 +25,7 @@ services:
   #Nginx Service
   webserver:
     image: nginx:alpine
-    container_name: make_checker-server
+    container_name: maker_checker-server
     restart: unless-stopped
     tty: true
     ports:
@@ -39,14 +39,14 @@ services:
   #MySQL Service
   db:
     image: mysql:5.7.22
-    container_name: make_checker-db
+    container_name: maker_checker-db
     restart: unless-stopped
     tty: true
     ports:
       - "3330:3306"
     volumes:
       - dbdata:/var/lib/mysql
-      # - ./docker-compose/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./docker-compose/mysql/my.cnf:/etc/mysql/my.cnf
     environment:
       MYSQL_DATABASE: maker_checker
       MYSQL_ROOT_PASSWORD: password
@@ -56,6 +56,29 @@ services:
       SERVICE_NAME: mysql
     networks:
       - maker-checker-app-network
+  mailhog_server:
+    image: mailhog/mailhog
+    container_name: maker-checker-mailhog
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      - maker-checker-app-network
+  phpmyadmin:
+    image: phpmyadmin:5.1.0-apache
+    container_name: maker-checker-phpmyadmin
+    restart: unless-stopped
+    ports: 
+        - 8200:80
+    environment:
+        PMA_HOST: db
+        PMA_PORT: 3306
+        PMA_USER: root
+        PMA_PASSWORD: password
+    networks:
+        - maker-checker-app-network
 #Volumes
 volumes:
   dbdata:
