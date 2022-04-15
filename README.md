@@ -62,11 +62,11 @@ These instructions will get you a copy of the project up and running on your loc
     $ git clone https://github.com/harmlessprince/maker-checker.git
     $ cd maker-checker
     $ cp .env.example .env
-    $ docker-compose build
-    $ docker-composse exec app composer install
+    $ docker-compose build app
+    $ docker-compose up -d
+    $ docker-compose exec app composer install
     $ docker-composse exec app php artisan key:generate
     $ docker-composse exec app php artisan migrate --seed
-    $ docker-compose up
     ```
     If all goes well 
   - Visit http://localhost:6060/ on your browser to view laravel home
