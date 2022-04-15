@@ -35,6 +35,7 @@ effect; and if the request is declined, the change isn’t persisted.
 * Email is sent to admins in the system except the creator of the request.
 
 ## API Endpoints
+### Base URL = http://localhost:6060/
 Method | Route | Description | Payload
 --- | --- | ---|---
 `POST` | `/api/auth/login` | login to the system by providing email and password | email and password
@@ -71,14 +72,22 @@ These instructions will get you a copy of the project up and running on your loc
   - Visit http://localhost:6060/ on your browser to view laravel home
   - Visit http://localhost:8200/ on your browser to view database using phpmyadmin
   - Visit http://localhost:8025/ on your browser to view mailhog to see emails
-  #### Stop Application
-    $ docker-compose down
-
+ 
+  ### Admin Logins
+        email: johndoe@gmail.com
+        password: password
+        OR
+        email: brucelee@gmail.com
+        password: password
   ### Testing
   ```
   $ docker-compose exec app php artisan test
   ```
   If correctly setup, all tests should pass
+  
+  #### Stop Application
+  
+  ```$ docker-compose down```
   
 ## Author
  Name: Adewuyi Taofeeq <br>
