@@ -35,24 +35,24 @@ effect; and if the request is declined, the change isn’t persisted.
 * Email is sent to admins in the system except the creator of the request.
 
 ## API Endpoints
-Method | Route | Description
---- | --- | ---
-`POST` | `/api/auth/login` | login to the system by providing email and password
-`POST` | `/api/auth/logout` | logout of the system
-`POST` | `/api/users` | Submit request to create a user
-`GET` | `/api/users/:id` | Fetch a single user
-`PATCH` | `/api/users/:id` | Submit request to update a user
-`DELETE` | `/api/users/:id` | Submit request to delete a user
-`GET` | `/api/request/pending` | Fetch all pending requests in the system
-`GET` | `/api/requests/pending/:id` | Fetch a single pending request
-`PATCH` | `/api/requests/approve/:id` | Approve a pending request
-`PATCH` | `/api/requests/decline/:id` | Decline a pending request
+Method | Route | Description | Payload
+--- | --- | ---|---
+`POST` | `/api/auth/login` | login to the system by providing email and password | email and password
+`POST` | `/api/auth/logout` | logout of the system | 
+`POST` | `/api/users` | Submit request to create a user | first_name, last_name, email , role and password 
+`GET` | `/api/users/:id` | Fetch a single user | 
+`PATCH` | `/api/users/:id` | Submit request to update a user | first_name, last_name, email
+`DELETE` | `/api/users/:id` | Submit request to delete a user |
+`GET` | `/api/request/pending` | Fetch all pending requests in the system |
+`GET` | `/api/requests/pending/:id` | Fetch a single pending request |
+`PATCH` | `/api/requests/approve/:id` | Approve a pending request |
+`PATCH` | `/api/requests/decline/:id` | Decline a pending request |
 
 ## Setup
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
   #### Dependencies
-  - [Docker](https://docs.docker.com/desktop/mac/install/)
+  - [Docker](https://docs.docker.com/desktop/)
  
   #### Getting Started
   - Install and setup docker
@@ -60,36 +60,30 @@ These instructions will get you a copy of the project up and running on your loc
     ```
     $ git clone https://github.com/harmlessprince/maker-checker.git
     $ cd maker-checker
-    $ docker run --rm \
-        -u "$(id -u):$(id -g)" \
-        -v $(pwd):/var/www/html \
-        -w /var/www/html \
-        laravelsail/php74-composer:latest \
-        composer install --ignore-platform-reqs
     $ cp .env.example .env
-    $ ./vendor/bin/sail up -d
-    $ ./vendor/bin/sail artisan key:generate
+    $ docker-compose build
+    $ docker-composse exec app composer install
+    $ docker-composse exec app php artisan key:generate
+    $ docker-composse exec app php artisan migrate --seed
+    $ docker-compose up
     ```
-  #### Run Migration
-    $ vendor/bin/sail bash
-    $ php artisan storage:link
-    $ php artisan migrate --seed
-    $ exit
-  #### Install Javascript Dependencies
-    $ vendor/bin/sail npm install
-    $ vendor/bin/sail npm run dev
-  - Visit http://localhost:81/ on your browser
+    If all goes well 
+  - Visit http://localhost:6060/ on your browser to view laravel home
+  - Visit http://localhost:8200/ on your browser to view database using phpmyadmin
+  - Visit http://localhost:8025/ on your browser to view mailhog to see emails
   #### Stop Application
-    $ ./vendor/bin/sail down -v
+    $ docker-compose down
 
   ### Testing
   ```
-  $ ./vendor/bin/sail test
+  $ docker-compose exec app php artisan test
   ```
   If correctly setup, all tests should pass
   
 ## Author
- Name: Adewuyi Taofeeq
+ Name: Adewuyi Taofeeq <br>
+ Email: realolamilekan@gmail.com <br>
+ LinkenIn:  <a href="#license">Adewuyi Taofeeq Olamikean</a> <br>
 
 ## License
 ISC
