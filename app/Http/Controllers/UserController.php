@@ -20,7 +20,7 @@ class UserController extends Controller
         $data = $request->validated();
         $data['password'] = Hash::make($data['password']);
         User::create($data);
-        return $this->respondCreated([], 'User created successfully');
+        return $this->respondSuccess([], 'User creation request submitted successfully');
     }
 
     public function show(User $user): JsonResponse

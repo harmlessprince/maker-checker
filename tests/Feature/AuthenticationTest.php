@@ -29,6 +29,41 @@ class AuthenticationTest extends TestCase
     }
 
     /**
+     * User can login into the system with email and password
+     *
+     * @return void
+     */
+    public function test_user_can_login_with_valid_email_and_password()
+    {
+        $user = User::withoutEvents(function () {
+            return User::factory()->create(['role' => UserRoles::ADMIN]);
+        });
+        $response =  $this->postJson('api/auth/login', [
+            'email' => $user->email,
+            'password' => 'password'
+        ]);
+        $response->assertStatus(200);
+        $this->assertAuthenticatedAs($user, 'sanctum');
+    }
+    /**
+     * User can not login the system with invalid email or password
+     *
+     * @return void
+     */
+    public function test_user_can_not_login_with_invalid_email_or_password()
+    {
+        $user = User::withoutEvents(function () {
+            return User::factory()->create(['role' => UserRoles::ADMIN]);
+        });
+        $response =  $this->postJson('api/auth/login', [
+            'email' => $user->email,
+            'password' => 'password1'
+        ]);
+        $response->assertStatus(401);
+        $this->assertFalse(auth('sanctum')->check());
+    }
+
+    /**
      * User can logout into the system
      *
      * @return void
@@ -62,5 +97,20 @@ class AuthenticationTest extends TestCase
         ]);
         $response->assertCreated();
         $this->assertDatabaseCount('users', 2);
+    }
+
+    /**
+     * An unauthenticated user can not access protected routes
+     *
+     * @return void
+     */
+
+    public function test_unauthenticated_user_cannot_access_protected_routes()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->expectException('Illuminate\Auth\AuthenticationException');
+
+        $this->postJson('/api/auth/logout'); //This route is protected with auth:api
     }
 }

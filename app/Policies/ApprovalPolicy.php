@@ -57,11 +57,13 @@ class ApprovalPolicy
      */
     public function update(User $user, Approval $approval)
     {
+       
         if ($approval->status != ApprovalStatus::PENDING){
             $status = $approval->status;
             return Response::deny("You are not allowed to act on a request that has been {$status}");
         }
-        if ($user->role == UserRoles::ADMIN && $user->id != $approval->created_by){
+        if ($user->role != UserRoles::ADMIN || $user->id == $approval->created_by){
+         
             return Response::deny('Only administrators that didn\'t initiate approval are allowed perform approval');
         }
         return  true;
