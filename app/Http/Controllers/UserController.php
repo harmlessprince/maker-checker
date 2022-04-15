@@ -32,6 +32,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, $id): JsonResponse
     {
         $user = User::findOrFail($id);
+        // dd($user);
         $this->authorize('update', $user);
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;

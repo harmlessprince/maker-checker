@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Events\ApprovalSubmittedEvent;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -66,6 +67,16 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e): Response
     {
+        if ($e instanceof ApprovalExistsException) {
+            return $this->apiResponse(
+                [
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'exception' => $e
+                ],
+                409
+            );
+        }
         if ($e instanceof AuthenticationException) {
             return $this->apiResponse(
                 [
@@ -149,6 +160,7 @@ class Handler extends ExceptionHandler
                 403
             );
         }
+       
         if ($e instanceof \Error) {
             return $this->apiResponse(
                 [

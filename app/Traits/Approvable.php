@@ -57,7 +57,7 @@ trait Approvable
                 ApprovalSubmittedEvent::dispatch($approval);
             }
         } else {
-            throw new ApprovalExistsException('An admin already submitted the request');
+            throw new ApprovalExistsException('An admin already submitted the request', 409);
         }
     }
 
