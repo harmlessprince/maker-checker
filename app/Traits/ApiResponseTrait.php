@@ -55,7 +55,7 @@ trait ApiResponseTrait
      *
      * @return JsonResponse
      */
-    protected function respondCreated($data, string $message = 'Resource created', int $statusCode = 201, array $headers = []): JsonResponse
+    protected function respondCreated($data = null, string $message = 'Resource created', int $statusCode = 201, array $headers = []): JsonResponse
     {
         return $this->apiResponse([
             'success' => true,

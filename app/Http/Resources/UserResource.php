@@ -16,6 +16,7 @@ class UserResource extends JsonResource
     {
         $me = optional($this);
         return [
+            'id' =>  $this->when($me->id, $me->id),
             'first_name' =>  $this->when($me->first_name, $me->first_name),
             'last_name' =>  $this->when($me->last_name, $me->last_name),
             'email' =>  $this->when($me->email, $me->email),
