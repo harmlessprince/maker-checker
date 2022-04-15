@@ -33,12 +33,12 @@ class ApprovalService
 
     public function update($data)
     {
-        return $data->approvable()->update($data->after);
+        return $data->approvable()->lockForUpdate()->update($data->after);
     }
 
     public function delete($data)
     {
-        return $data->approvable()->delete();
+        return $data->approvable()->lockForUpdate()->delete();
     }
 
 }

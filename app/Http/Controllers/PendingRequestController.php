@@ -9,15 +9,16 @@ use Illuminate\Http\Request;
 
 class PendingRequestController extends Controller
 {
-    public function index(): JsonResponse
+    public function index()
     {
         $this->authorize('viewAny', Approval::class);
-        return $this->respondSuccess(['data' => ApprovalResource::collection(Approval::pendingRequests()->simplePaginate())], 'All pending requests retrieved successfully');
+
+        return $this->respondWithResourceCollection(ApprovalResource::collection(Approval::pendingRequests()->simplePaginate()), 'All pending requests retrieved successfully');
     }
 
     public function show(Approval $approval): JsonResponse
     {
         $this->authorize('view', $approval);
-        return $this->respondSuccess(['data' =>  new ApprovalResource($approval)], 'Pending requests retrieved successfully');
+        return $this->respondWithResource(new ApprovalResource($approval), 'Pending requests retrieved successfully');
     }
 }

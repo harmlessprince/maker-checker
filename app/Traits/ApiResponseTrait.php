@@ -5,6 +5,8 @@ namespace App\Traits;
 use Error;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Validation\ValidationException;
 trait ApiResponseTrait
 {
@@ -108,7 +110,41 @@ trait ApiResponseTrait
     {
         return $this->respondError($message, 401);
     }
+    /**
+     * @param ResourceCollection $resourceCollection
+     * @param null $message
+     * @param int $statusCode
+     * @param array $headers
+     * @return JsonResponse
+     */
+    protected function respondWithResourceCollection(ResourceCollection $resourceCollection, $message = null, int $statusCode = 200, array $headers = []): JsonResponse
+    {
+        return $this->apiResponse(
+            [
+                'success' => true,
+                'result' => $resourceCollection->response()->getData(),
+                'message' => $message
+            ], $statusCode, $headers
+        );
+    }
 
+     /**
+     * @param JsonResource $resource
+     * @param null $message
+     * @param int $statusCode
+     * @param array $headers
+     * @return JsonResponse
+     */
+    protected function respondWithResource(JsonResource $resource, $message = null, int $statusCode = 200, array $headers = []): JsonResponse
+    {
+        return $this->apiResponse(
+            [
+                'success' => true,
+                'result' => $resource,
+                'message' => $message
+            ], $statusCode, $headers
+        );
+    }
     /*
      *
      * Just a wrapper to facilitate abstract
@@ -156,6 +192,7 @@ trait ApiResponseTrait
             422
         );
     }
+
 
     /**
      * @param array $data
