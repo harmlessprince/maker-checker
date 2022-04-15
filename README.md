@@ -36,6 +36,7 @@ effect; and if the request is declined, the change isn’t persisted.
 
 ## API Endpoints
 ### Base URL = http://localhost:6060/
+Available roles are user and admin
 Method | Route | Description | Payload
 --- | --- | ---|---
 `POST` | `/api/auth/login` | login to the system by providing email and password | email and password
