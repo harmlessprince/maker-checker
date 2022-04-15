@@ -72,7 +72,8 @@ These instructions will get you a copy of the project up and running on your loc
   - Visit http://localhost:6060/ on your browser to view laravel home
   - Visit http://localhost:8200/ on your browser to view database using phpmyadmin
   - Visit http://localhost:8025/ on your browser to view mailhog to see emails
- 
+  
+  if Seeding goes well, you should also get an email in your mailHog for testing purpose
   ### Admin Logins
         email: johndoe@gmail.com
         password: password
