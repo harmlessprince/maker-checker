@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Messages;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,7 @@ class AuthenticationController extends Controller
                  */
                 $user = Auth::user();
                 $token = $user->createToken('api-token')->plainTextToken;
-                return $this->respondSuccess(['token' => $token, 'user' => $user], Messages::LOGIN_SUCCESS);
+                return $this->respondSuccess(['token' => $token, 'user' => new UserResource($user)], Messages::LOGIN_SUCCESS);
             }
             return $this->respondUnAuthorized(Messages::FAILED_LOGIN);
         } catch (\Exception $exception) {

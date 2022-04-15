@@ -27,6 +27,12 @@ class Approval extends Model
     public  function createdBy (){
         return $this->belongsTo(User::class, 'created_by');
     }
+    public  function approvedBy (){
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+    public  function declinedBy (){
+        return $this->belongsTo(User::class, 'declined_by');
+    }
 
     public function scopePendingRequests(Builder $builder){
        return $builder
