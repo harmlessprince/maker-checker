@@ -41,6 +41,7 @@ Method | Route | Description | Payload
 --- | --- | ---|---
 `POST` | `/api/auth/login` | login to the system by providing email and password | email and password
 `POST` | `/api/auth/logout` | logout of the system | 
+`POST` | `/api/auth/register` | register new user | first_name, last_name, email , role and password 
 `POST` | `/api/users` | Submit request to create a user | first_name, last_name, email , role and password 
 `GET` | `/api/users/:id` | Fetch a single user | 
 `PATCH` | `/api/users/:id` | Submit request to update a user | first_name, last_name, email
