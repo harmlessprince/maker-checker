@@ -1,4 +1,4 @@
-# Patricia (Glover) Maker-Checker Task
+# Maker-Checker
 
 ## Introduction
 
